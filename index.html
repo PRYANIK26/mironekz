@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подготовка к экзамену</title>
+    <style>
+        /* Минимальные стили только для адаптивности и читабельности */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.4;
+        }
+        
+        .ticket-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 18px;
+            border: 2px solid #333;
+            background: #f0f0f0;
+            cursor: pointer;
+            text-align: left;
+        }
+        
+        .ticket-content {
+            display: none;
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+        }
+        
+        .ticket-content.active {
+            display: block;
+        }
+        
+        .back-button {
+            padding: 10px 20px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 1px solid #333;
+            background: #e0e0e0;
+            cursor: pointer;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 480px) {
+            body {
+                margin: 10px;
+            }
+            
+            .ticket-button {
+                padding: 20px;
+                font-size: 20px;
+            }
+            
+            .ticket-content {
+                padding: 15px;
+            }
+        }
+        
+        /* Дополнительная адаптивность для очень маленьких экранов (Apple Watch) */
+        @media (max-width: 320px) {
+            .ticket-button {
+                padding: 25px;
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Подготовка к экзамену</h1>
+    
+    <!-- Контейнер для кнопок билетов -->
+    <div id="tickets-list">
+        <!-- Кнопки будут сгенерированы JavaScript -->
+    </div>
+    
+    <!-- Контейнер для содержимого билетов -->
+    <div id="tickets-content">
+        <!-- Содержимое билетов будет сгенерировано JavaScript -->
+    </div>
+
+    <script>
+        // ====== РЕДАКТИРУЕМЫЕ ДАННЫЕ БИЛЕТОВ ======
+        // Добавляйте новые билеты в этот массив
+        const examTickets = [
+            {
+                id: 1,
+                title: "Основы программирования",
+                content: `
+                    <h2>Билет 1: Основы программирования</h2>
+                    <p><strong>Вопрос 1:</strong> Что такое алгоритм?</p>
+                    <p>Алгоритм - это четкая последовательность действий, направленных на решение конкретной задачи.</p>
+                    
+                    <p><strong>Вопрос 2:</strong> Основные типы данных в программировании</p>
+                    <p>Основные типы: числовые (int, float), строковые (string), логические (boolean), массивы.</p>
+                    
+                    <p><strong>Вопрос 3:</strong> Что такое переменная?</p>
+                    <p>Переменная - это именованная область памяти для хранения данных, значение которой может изменяться.</p>
+                `
+            },
+            {
+                id: 2,
+                title: "Структуры данных",
+                content: `
+                    <h2>Билет 2: Структуры данных</h2>
+                    <p><strong>Вопрос 1:</strong> Что такое массив?</p>
+                    <p>Массив - это структура данных, представляющая собой набор элементов одного типа, расположенных в памяти друг за другом.</p>
+                    
+                    <p><strong>Вопрос 2:</strong> Отличие списка от массива</p>
+                    <p>Список может изменять свой размер динамически, массив имеет фиксированный размер.</p>
+                    
+                    <p><strong>Вопрос 3:</strong> Что такое стек?</p>
+                    <p>Стек - структура данных типа LIFO (Last In, First Out), где добавление и удаление элементов происходит с одного конца.</p>
+                `
+            },
+            {
+                id: 3,
+                title: "Циклы и условия",
+                content: `
+                    <h2>Билет 3: Циклы и условия</h2>
+                    <p><strong>Вопрос 1:</strong> Типы циклов</p>
+                    <p>Основные типы: for (с известным количеством итераций), while (с условием), do-while (с проверкой условия в конце).</p>
+                    
+                    <p><strong>Вопрос 2:</strong> Условные операторы</p>
+                    <p>if-else позволяет выполнять различные блоки кода в зависимости от условия. Switch-case для множественного выбора.</p>
+                    
+                    <p><strong>Вопрос 3:</strong> Что такое итерация?</p>
+                    <p>Итерация - это однократное выполнение тела цикла.</p>
+                `
+            }
+        ];
+        // ====== КОНЕЦ РЕДАКТИРУЕМЫХ ДАННЫХ ======
+        
+        // Функция для генерации кнопок билетов
+        function generateTicketButtons() {
+            const ticketsList = document.getElementById('tickets-list');
+            
+            examTickets.forEach(ticket => {
+                const button = document.createElement('button');
+                button.className = 'ticket-button';
+                button.textContent = `Билет ${ticket.id}: ${ticket.title}`;
+                button.onclick = () => showTicket(ticket.id);
+                ticketsList.appendChild(button);
+            });
+        }
+        
+        // Функция для генерации содержимого билетов
+        function generateTicketContent() {
+            const ticketsContent = document.getElementById('tickets-content');
+            
+            examTickets.forEach(ticket => {
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'ticket-content';
+                contentDiv.id = `ticket-${ticket.id}`;
+                
+                const backButton = document.createElement('button');
+                backButton.className = 'back-button';
+                backButton.textContent = '← Назад к списку билетов';
+                backButton.onclick = showTicketsList;
+                
+                contentDiv.innerHTML = ticket.content;
+                contentDiv.insertBefore(backButton, contentDiv.firstChild);
+                
+                ticketsContent.appendChild(contentDiv);
+            });
+        }
+        
+        // Функция для показа конкретного билета
+        function showTicket(ticketId) {
+            // Скрыть список билетов
+            document.getElementById('tickets-list').style.display = 'none';
+            
+            // Скрыть все билеты
+            const allTickets = document.querySelectorAll('.ticket-content');
+            allTickets.forEach(ticket => ticket.classList.remove('active'));
+            
+            // Показать выбранный билет
+            const selectedTicket = document.getElementById(`ticket-${ticketId}`);
+            selectedTicket.classList.add('active');
+            
+            // Прокрутить к началу содержимого билета
+            selectedTicket.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // Функция для возврата к списку билетов
+        function showTicketsList() {
+            // Показать список билетов
+            document.getElementById('tickets-list').style.display = 'block';
+            
+            // Скрыть все билеты
+            const allTickets = document.querySelectorAll('.ticket-content');
+            allTickets.forEach(ticket => ticket.classList.remove('active'));
+            
+            // Прокрутить к началу страницы
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            generateTicketButtons();
+            generateTicketContent();
+        });
+    </script>
+</body>
+</html>
