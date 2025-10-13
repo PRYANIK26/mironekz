@@ -41,8 +41,9 @@
             background: #222;
             border: 1px solid #666;
             color: #fff;
-            resize: vertical;
             min-height: 30px;
+            -webkit-appearance: none;
+            appearance: none;
         }
         
         #aiSendButton {
@@ -52,6 +53,8 @@
             background: #333;
             color: #fff;
             cursor: pointer;
+            min-width: 70px;
+            white-space: nowrap;
         }
         
         #aiSendButton:hover:not(:disabled) {
@@ -171,10 +174,15 @@
     <div class="ai-search-section">
         <div class="ai-search-title">🤖 AI-поиск по билетам</div>
         <div class="ai-input-group">
-            <textarea 
+            <input 
+                type="text"
                 id="aiQuestionInput" 
                 placeholder="Введите ваш вопрос по билетам..."
-            ></textarea>
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="sentences"
+                spellcheck="false"
+            />
             <button id="aiSendButton" onclick="askAI()">Отправить</button>
         </div>
         <div id="aiResponseOutput"></div>
@@ -295,9 +303,14 @@
         
         // Функция для отправки запроса к AI
         async function askAI() {
-            const question = document.getElementById('aiQuestionInput').value.trim();
+            const inputElement = document.getElementById('aiQuestionInput');
             const outputDiv = document.getElementById('aiResponseOutput');
             const sendButton = document.getElementById('aiSendButton');
+            
+            // Явно получаем значение и триммим
+            const question = (inputElement.value || '').trim();
+            
+            console.log('Sending question:', question); // Для отладки
 
             if (!question) {
                 outputDiv.innerHTML = '<span class="ai-error">Пожалуйста, введите вопрос</span>';
@@ -307,7 +320,7 @@
 
             // Отключаем кнопку и показываем загрузку
             sendButton.disabled = true;
-            outputDiv.innerHTML = '<span class="ai-loading">Обработка запроса...</span>';
+            outputDiv.innerHTML = `<span class="ai-loading">Обработка запроса...</span><br><small style="color:#666;">Вопрос: ${question}</small>`;
             outputDiv.classList.add('visible');
 
             try {
@@ -378,13 +391,28 @@ ${ticketsDatabase}`;
             }
         }
         
-        // Обработчик Enter для отправки (Ctrl+Enter или Cmd+Enter)
+        // Обработчик Enter для отправки (просто Enter для input)
         document.addEventListener('DOMContentLoaded', function() {
             generateTicketButtons();
             generateTicketContent();
             
-            document.getElementById('aiQuestionInput').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+            const inputElement = document.getElementById('aiQuestionInput');
+            
+            // Обработчики для iOS/watchOS
+            inputElement.addEventListener('blur', function() {
+                // Сохраняем значение при потере фокуса
+                console.log('Input value:', this.value);
+            });
+            
+            inputElement.addEventListener('change', function() {
+                // Дополнительный обработчик изменения
+                console.log('Input changed:', this.value);
+            });
+            
+            // Enter для отправки
+            inputElement.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
                     askAI();
                 }
             });
