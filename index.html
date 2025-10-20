@@ -68,7 +68,7 @@
         
         #aiResponseOutput {
             padding: 8px;
-            font-size: 12px;
+            font-size: 10px;
             line-height: 1.5;
             background: #222;
             border: 1px solid #666;
@@ -200,7 +200,7 @@
     <script>
         // ====== РЕДАКТИРУЕМЫЕ ДАННЫЕ БИЛЕТОВ ======
         // Добавляйте новые билеты в этот массив
-        const examTickets = 
+const examTickets = 
 [
     {
         "id": 1,
@@ -456,11 +456,9 @@
 
         // ====== КОНЕЦ РЕДАКТИРУЕМЫХ ДАННЫХ ======
         
-        const apiKeyPart1 = 'sk-proj-EkwdGHNnIGyTYvzjrOGJXGDMda71E28Z015HR5IFLoLubn3CXipUHqozY-e';
-        const apiKeyPart2 = '2d4vBb6Q6Cix24_T3BlbkFJ82ECP6KuKydVzwCmnqZT6SF2-pbFdCJEMUVdYnGsUbRZ';
-        const apiKeyPart3 = '9aXTpoyketvlCwlKsRG6jXNDi86KEA';
-        const apiKey = apiKeyPart1 + apiKeyPart2 + apiKeyPart3;
-
+        // API ключ встроен в код
+        const apiKey = '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';
+        
         // Функция для генерации кнопок билетов
         function generateTicketButtons() {
             const ticketsList = document.getElementById('tickets-list');
@@ -592,14 +590,16 @@
 
 ${ticketsDatabase}`;
 
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${apiKey}`
+                        'Authorization': `Bearer ${apiKey}`,
+                        'HTTP-Referer': window.location.href,
+                        'X-Title': 'Exam Prep AI Assistant'
                     },
                     body: JSON.stringify({
-                        model: 'gpt-5-mini',
+                        model: 'anthropic/claude-sonnet-4',
                         messages: [
                             {
                                 role: 'system',
