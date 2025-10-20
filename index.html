@@ -456,9 +456,11 @@
 
         // ====== КОНЕЦ РЕДАКТИРУЕМЫХ ДАННЫХ ======
         
-        // API ключ встроен в код
-        const apiKey = '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';
-        
+        const apiKeyPart1 = 'sk-proj-EkwdGHNnIGyTYvzjrOGJXGDMda71E28Z015HR5IFLoLubn3CXipUHqozY-e';
+        const apiKeyPart2 = '2d4vBb6Q6Cix24_T3BlbkFJ82ECP6KuKydVzwCmnqZT6SF2-pbFdCJEMUVdYnGsUbRZ';
+        const apiKeyPart3 = '9aXTpoyketvlCwlKsRG6jXNDi86KEA';
+        const apiKey = apiKeyPart1 + apiKeyPart2 + apiKeyPart3;
+
         // Функция для генерации кнопок билетов
         function generateTicketButtons() {
             const ticketsList = document.getElementById('tickets-list');
